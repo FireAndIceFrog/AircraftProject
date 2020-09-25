@@ -1,26 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Login from './Login'
+import Menu from './Menu'
+import { useCookies } from 'react-cookie';
+import ClientView from "./ClientView"
+import pageIndex from './pageIndex'
+import NewBooking from './NewBooking'
 
-function App() {
+
+
+export var LoginStateContext = React.createContext([0, ()=>{}]);
+export var PageStateContext = React.createContext([0, ()=>{}]);
+
+export default function App() {
+  //create the login Cookie tab
+  const [loginCookie, setLoginCookie] = useCookies(['login',0]);
+  
+  const changeCookie = (newLogin)=> {
+    setLoginCookie('login', newLogin, { path: '/' });
+  }
+
+  const logged = typeof(loginCookie.login) == "undefined"? [0,-1] : loginCookie.login
+  //create the current page state - this handles changes between pages.
+  const [currPage, setCurrPage] = React.useState("home");
+  
+  
+
+  LoginStateContext = React.createContext([logged,changeCookie]);
+  PageStateContext = React.createContext([currPage, setCurrPage]);
+  console.log("Current page: ", currPage)
+  //to retrieve these variables we just subscribe using: 
+  //{logged, setlogged} = React.useContext(LoginStateContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <PageStateContext.Provider value={ [currPage,setCurrPage] }>
+        <header className="App-header">
+            <Menu     />
+        </header>
+        <div className="App" style = {{overflowX: "hidden"}}>
+          <LoginStateContext.Provider value={ [logged,changeCookie] }>
+          
+            {/* eslint eqeqeq: 0  */}
+            { logged[0] == 0 ?     <Login/>    : null}
+            
+            { logged[0] >= 1 && currPage == "home" ?   <ClientView/> : null}
+            { logged[0] >= 1 && currPage == "newBooking" ?   <NewBooking/> : null}
+          </LoginStateContext.Provider>
+        
+        </div>
+      </PageStateContext.Provider>
     </div>
   );
 }
-
-export default App;
