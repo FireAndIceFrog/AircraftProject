@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import ClientView from "./ClientView"
 import pageIndex from './pageIndex'
 import NewBooking from './NewBooking'
-
+import BookingHistory from './BookingHistory'
 
 
 export var LoginStateContext = React.createContext([0, ()=>{}]);
@@ -38,7 +38,7 @@ export default function App() {
         <header className="App-header">
             <Menu     />
         </header>
-        <div className="App" style = {{overflowX: "hidden"}}>
+        <div className="App" style = {{overflowX: "hidden", position: "static"}}>
           <LoginStateContext.Provider value={ [logged,changeCookie] }>
           
             {/* eslint eqeqeq: 0  */}
@@ -46,6 +46,7 @@ export default function App() {
             
             { logged[0] >= 1 && currPage == "home" ?   <ClientView/> : null}
             { logged[0] >= 1 && currPage == "newBooking" ?   <NewBooking/> : null}
+            { logged[0] >= 1 && currPage == "oldBooking" ?   <BookingHistory/> : null}
           </LoginStateContext.Provider>
         
         </div>
