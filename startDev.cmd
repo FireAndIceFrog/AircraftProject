@@ -1,0 +1,1 @@
+start cmd.exe @cmd /k "cd backend & nodemon start"  | start cmd.exe @cmd /k "cd frontend & npm start"

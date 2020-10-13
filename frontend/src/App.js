@@ -7,6 +7,7 @@ import ClientView from "./ClientView"
 import pageIndex from './pageIndex'
 import NewBooking from './NewBooking'
 import BookingHistory from './BookingHistory'
+import Register from './Register'
 
 
 export var LoginStateContext = React.createContext([0, ()=>{}]);
@@ -43,7 +44,7 @@ export default function App() {
           
             {/* eslint eqeqeq: 0  */}
             { logged[0] == 0 ?     <Login/>    : null}
-            
+            { logged[0] == 0 && currPage == "register"?     <Register/>    : null}
             { logged[0] >= 1 && currPage == "home" ?   <ClientView/> : null}
             { logged[0] >= 1 && currPage == "newBooking" ?   <NewBooking/> : null}
             { logged[0] >= 1 && currPage == "oldBooking" ?   <BookingHistory/> : null}
